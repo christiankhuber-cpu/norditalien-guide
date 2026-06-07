@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nord Italia — Reisebegleiter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --ivory: #faf7f2;
+    --sand: #e8e0d0;
+    --terracotta: #b85c38;
+    --rust: #9c4a2a;
+    --olive: #6b7c5c;
+    --forest: #3d4f35;
+    --ink: #1a1a1a;
+    --warm-grey: #8a8278;
+    --light-grey: #d4cfc7;
+    --gold: #c9a84c;
+    --gold-light: #e8d5a0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--ivory);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .header {
+    background: var(--forest);
+    padding: 48px 24px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(184,92,56,0.1) 0%, transparent 50%);
+  }
+  .header-eyebrow {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(42px, 9vw, 72px);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.05;
+    position: relative;
+    letter-spacing: -0.5px;
+  }
+  .header-title em { font-style: italic; color: var(--gold-light); }
+  .header-sub {
+    font-size: 11px;
+    font-weight: 300;
+    color: rgba(245,240,232,0.5);
+    margin-top: 14px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    position: relative;
+  }
+  .header-line {
+    width: 36px; height: 1px;
+    background: var(--gold);
+    margin: 20px auto 0;
+    opacity: 0.5;
+    position: relative;
+  }
+  .nav-wrapper {
+    background: var(--forest);
+    padding: 0 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  }
+  .nav-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-radius: 24px;
+    border: 1px solid rgba(201,168,76,0.25);
+    background: transparent;
+    color: rgba(245,240,232,0.6);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11.5px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+  }
+  .nav-tab:hover { border-color: rgba(201,168,76,0.5); color: var(--cream); }
+  .nav-tab.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--forest);
+    font-weight: 500;
+  }
+  .main {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 16px 80px;
+  }
+  .section { display: none; animation: fadeIn 0.35s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section-header {
+    padding: 36px 0 24px;
+    border-bottom: 1px solid var(--sand);
+    margin-bottom: 4px;
+  }
+  .section-label {
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.15;
+  }
+  .section-desc {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--warm-grey);
+    margin-top: 8px;
+    line-height: 1.65;
+  }
+  .region-group { margin-top: 28px; }
+  .region-label {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--warm-grey);
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--light-grey);
+  }
+  .card {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--sand);
+    position: relative;
+  }
+  .card:last-child { border-bottom: none; }
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 5px;
+  }
+  .card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.2;
+    flex: 1;
+  }
+  .card-badge {
+    flex-shrink: 0;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 12px;
+    margin-top: 4px;
+  }
+  .badge-caffe    { background: rgba(107,124,92,0.12); color: var(--forest); }
+  .badge-restaurant { background: rgba(184,92,56,0.1); color: var(--rust); }
+  .badge-bar      { background: rgba(156,74,42,0.09); color: #8a4030; }
+  .badge-wein     { background: rgba(156,74,42,0.1); color: #7a3020; }
+  .badge-fisch    { background: rgba(70,110,140,0.1); color: #2a5a7a; }
+  .badge-baeckerei{ background: rgba(201,168,76,0.13); color: #6a4c10; }
+  .badge-metzgerei{ background: rgba(140,70,60,0.1); color: #7a3030; }
+  .badge-supermarkt { background: rgba(80,80,80,0.08); color: #505050; }
+  .badge-discount { background: rgba(80,80,80,0.07); color: #606060; }
+  .card-location {
+    font-size: 11px;
+    color: var(--warm-grey);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .card-location::before {
+    content: '';
+    display: inline-block;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    opacity: 0.55;
+    flex-shrink: 0;
+  }
+  .card-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15.5px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--warm-grey);
+    line-height: 1.45;
+    margin-bottom: 10px;
+  }
+  .card-body {
+    font-size: 13.5px;
+    font-weight: 300;
+    color: #3a3730;
+    line-height: 1.72;
+    margin-bottom: 14px;
+  }
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--terracotta);
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    border-bottom: 1px solid rgba(184,92,56,0.25);
+    padding-bottom: 1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .card-link:hover { color: var(--rust); border-color: var(--rust); }
+  .card-link svg { width: 10px; height: 10px; flex-shrink: 0; }
+  .new-badge {
+    display: inline-block;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.4);
+    padding: 2px 6px;
+    border-radius: 8px;
+    margin-left: 8px;
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+  }
+  /* INTRO */
+  .intro-screen { padding: 40px 0 32px; }
+  .intro-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.5;
+    margin-bottom: 18px;
+  }
+  .intro-text {
+    font-size: 13.5px;
+    font-weight: 300;
+    color: var(--warm-grey);
+    line-height: 1.75;
+    margin-bottom: 28px;
+  }
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .intro-tile {
+    background: var(--cream);
+    border: 1px solid var(--sand);
+    border-radius: 10px;
+    padding: 18px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .intro-tile:hover { border-color: var(--terracotta); }
+  .intro-tile-icon { font-size: 20px; margin-bottom: 8px; }
+  .intro-tile-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+  .intro-tile-sub { font-size: 11px; color: var(--warm-grey); font-weight: 300; }
+  .divider { width: 32px; height: 1px; background: var(--terracotta); opacity: 0.35; margin: 24px 0; }
+  .footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 11px;
+    color: var(--light-grey);
+    letter-spacing: 1px;
+    font-weight: 300;
+  }
+  @media (max-width: 400px) {
+    .intro-grid { grid-template-columns: 1fr; }
+    .header-title { font-size: 38px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Curated Travel Guide</div>
+  <h1 class="header-title">Nord <em>Italia</em></h1>
+  <p class="header-sub">Friaul · Bibione · Collio · Isonzo</p>
+  <div class="header-line"></div>
+</div>
+
+<div class="nav-wrapper">
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('intro')">Start</button>
+    <button class="nav-tab" onclick="showSection('cafes')">Caffè</button>
+    <button class="nav-tab" onclick="showSection('restaurants')">Ristoranti</button>
+    <button class="nav-tab" onclick="showSection('wein')">Vini</button>
+    <button class="nav-tab" onclick="showSection('einkauf')">Einkauf</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- INTRO -->
+  <div id="intro" class="section active">
+    <div class="intro-screen">
+      <p class="intro-quote">„Il dolce far niente beginnt nicht am Strand — es beginnt am Tresen."</p>
+      <p class="intro-text">Dieser Guide ist kein Reiseführer im klassischen Sinn. Er ist eine kuratierte Auswahl von Orten, die einen echten Grund haben, hier zu sein: weil sie gut sind, weil sie regional verwurzelt sind, weil man sich dort wohlfühlt, ohne das Gefühl zu haben, Tourist zu sein.</p>
+      <p class="intro-text">Bibione, Friaul, das Isonzotal mit seinen Weinkellereien — das ist Norditalien jenseits der großen Bühnen.</p>
+      <div class="divider"></div>
+      <div class="intro-grid">
+        <div class="intro-tile" onclick="showSection('cafes')">
+          <div class="intro-tile-icon">☕</div>
+          <div class="intro-tile-title">Caffè</div>
+          <div class="intro-tile-sub">Bibione · Udine</div>
+        </div>
+        <div class="intro-tile" onclick="showSection('restaurants')">
+          <div class="intro-tile-icon">🍽</div>
+          <div class="intro-tile-title">Ristoranti</div>
+          <div class="intro-tile-sub">Bibione · Friaul · Isonzo</div>
+        </div>
+        <div class="intro-tile" onclick="showSection('wein')">
+          <div class="intro-tile-icon">🍷</div>
+          <div class="intro-tile-title">Vini & Cantine</div>
+          <div class="intro-tile-sub">Collio · Isonzo</div>
+        </div>
+        <div class="intro-tile" onclick="showSection('einkauf')">
+          <div class="intro-tile-icon">🛒</div>
+          <div class="intro-tile-title">Einkauf</div>
+          <div class="intro-tile-sub">Bibione · Portogruaro · Udine</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAFFÈ -->
+  <div id="cafes" class="section">
+    <div class="section-header">
+      <div class="section-label">Rubrik I</div>
+      <h2 class="section-title">Caffè & Bar</h2>
+      <p class="section-desc">Zwei sehr verschiedene Orte — einer direkt am Wasser in Bibione, einer mit dem besten Espresso in Udine.</p>
+    </div>
+
+    <div class="region-group">
+      <div class="region-label">Bibione</div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Café Gelateria La Rotonda</div>
+          <span class="card-badge badge-caffe">Caffè · Gelateria</span>
+        </div>
+        <div class="card-location">Bibione, Strandpromenade</div>
+        <p class="card-tagline">Der Klassiker am Rundbau — mit Blick aufs Meer und Eis aus Eigenproduktion.</p>
+        <p class="card-body">La Rotonda ist eine feste Größe in Bibione, und das zu Recht: Die Lage direkt an der Promenade ist unschlagbar, das Gelato wird vor Ort gemacht, und der Espresso hält, was die Lage verspricht. Guter Ausgangspunkt für den Morgen oder den Abendspaziergang am Wasser — bevor der Strandverkehr einsetzt, ist es hier besonders angenehm.</p>
+        <a href="https://maps.app.goo.gl/VApK4ocYRa9CkNL97" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="region-group">
+      <div class="region-label" style="margin-top:24px;">Udine</div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Caffè Beltrame</div>
+          <span class="card-badge badge-caffe">Bar · Caffè</span>
+        </div>
+        <div class="card-location">Udine, Via G. Cosattini</div>
+        <p class="card-tagline">Einer der ältesten Kaffeehäuser Udines — mit dem entsprechenden Selbstbewusstsein.</p>
+        <p class="card-body">Wer nach Udine fährt und nicht am Beltrame vorbeikommt, hat einen Fehler gemacht. Das Caffè gehört zu den Institutionen der Stadt: guter Kaffee, historisches Ambiente, keine Ausflüchte beim Espresso. Nicht für den schnellen Kaffee zwischendurch — eher für alle, die eine halbe Stunde Pause einplanen und dabei etwas von Udine verstehen wollen.</p>
+        <a href="https://maps.app.goo.gl/2BvPU1BaoJAyCCCp6" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- RISTORANTI -->
+  <div id="restaurants" class="section">
+    <div class="section-header">
+      <div class="section-label">Rubrik II</div>
+      <h2 class="section-title">Ristoranti & Bar</h2>
+      <p class="section-desc">Von der Strandbar mit Abendkarte bis zum Ristorante mit friulanischer Tiefe — alles, was zwischen Aperitivo und Secondo passt.</p>
+    </div>
+
+    <div class="region-group">
+      <div class="region-label">Bibione — am Strand</div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Chiosco Luna</div>
+          <span class="card-badge badge-restaurant">Chiosco · Ristorante</span>
+        </div>
+        <div class="card-location">Bibione, direkt am Strand</div>
+        <p class="card-tagline">Dinner mit den Füßen im Sand — und einer echten Abendkarte dazu.</p>
+        <p class="card-body">Chiosco Luna ist kein gewöhnlicher Strandkiosk. Abends wird hier aus einer eigenständigen Dinerkarte gegessen, und die Atmosphäre macht den Unterschied: Tische direkt am Wasser, Sonnenuntergang inklusive, und eine Küche, die mehr liefert als Strandbar-Standard. Wer in Bibione einmal draußen essen will, ohne Kompromisse bei der Qualität zu machen, ist hier richtig.</p>
+        <a href="https://maps.app.goo.gl/48JLWZcK4NcdtXRc9" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Cocobongo</div>
+          <span class="card-badge badge-bar">Bar · Restaurant</span>
+        </div>
+        <div class="card-location">Bibione Pineda, Via dei Lauri</div>
+        <p class="card-tagline">Direkt am Strand, herzliche Gastgeber — und abends läuft die Bar weiter, wenn die Küche schließt.</p>
+        <p class="card-body">Das Cocobongo in Bibione Pineda ist einer der Orte, bei denen die Atmosphäre mehr trägt als die Karte: Angelica und Osvaldo empfangen ihre Gäste mit echtem Engagement, die Terrasse liegt direkt am Sand, und der Übergang vom Dinner zur Cocktailbar passiert fließend. Wer nur auf einen Sundowner vorbeikommt, macht genauso wenig falsch wie wer zum Abendessen bleibt.</p>
+        <a href="https://maps.google.com/?q=Cocobongo+Via+dei+Lauri+22+Bibione" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="region-group">
+      <div class="region-label" style="margin-top:24px;">Bibione & Umgebung</div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Metro Bar</div>
+          <span class="card-badge badge-bar">Bar · Bistro</span>
+        </div>
+        <div class="card-location">Bibione, Viale Alemagna</div>
+        <p class="card-tagline">Unkompliziert, verlässlich und gut — der lokale Treffpunkt ohne Touristen-Aufschlag.</p>
+        <p class="card-body">Der Metro Bar ist kein Ort für besondere Anlässe, sondern für den alltäglichen Genuss: solider Espresso, kalte Drinks, schnelle Kleinigkeiten zu essen. Hier sitzen die Einheimischen, und das Preisniveau zeigt es. Gut für den kurzen Zwischenstopp oder den späten Nachmittag, wenn die Strandpromenade zu voll geworden ist.</p>
+        <a href="https://maps.app.goo.gl/6zz7fQcniWsrWqkg9" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="region-group">
+      <div class="region-label" style="margin-top:24px;">Lignano Sabbiadoro</div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Restaurant Da Gigi Marchetto</div>
+          <span class="card-badge badge-restaurant">Ristorante</span>
+        </div>
+        <div class="card-location">Lignano Sabbiadoro, Via Casa Bianca</div>
+        <p class="card-tagline">Friulanische Küche mit direktem Draht zu den besten Weinkellern der Region.</p>
+        <p class="card-body">Da Gigi Marchetto ist ein Ristorante mit echter regionaler Verankerung — und das zeigt sich auch auf der Weinkarte: Lis Neris steht dort, und wer nicht extra zum Weingut fahren will, bekommt hier bereits einen sehr guten Eindruck davon, was das Isonzotal vinologisch zu bieten hat. Küche und Keller ergänzen sich gut. Für einen Ausflugstag ins friulanische Hinterland eine klare Empfehlung.</p>
+        <a href="https://maps.app.goo.gl/oo8xqTViJPppZq4h9" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Ristorante Croce del Sud</div>
+          <span class="card-badge badge-restaurant">Ristorante</span>
+        </div>
+        <div class="card-location">Lignano Sabbiadoro, Viale Venezia</div>
+        <p class="card-tagline">Das ruhigere Ristorante in Lignano — mit Küche, die den Fisch ernst nimmt.</p>
+        <p class="card-body">Das Croce del Sud liegt am Viale Venezia, etwas abseits des Strandbetriebs, und das tut ihm gut. Die Küche konzentriert sich auf das, was die Adria und die nahe Lagune hergeben — Fisch und Meeresfrüchte, ohne Umwege. Wer in Lignano nicht im erstbesten Strandrestaurant landen will und einen Abend mit mehr Substanz sucht, ist hier besser aufgehoben.</p>
+        <a href="https://maps.app.goo.gl/63BU56vXpKkSudjF9" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEIN -->
+  <div id="wein" class="section">
+    <div class="section-header">
+      <div class="section-label">Rubrik III</div>
+      <h2 class="section-title">Vini & Cantine</h2>
+      <p class="section-desc">Das Isonzotal und der Collio produzieren Weißweine, die international unterschätzt und lokal zu Recht geschätzt werden. Drei Adressen, die das belegen.</p>
+    </div>
+
+    <div class="region-group">
+      <div class="region-label">Precenicco · Friaul</div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Società Agricola Baccichetto Vittorino</div>
+          <span class="card-badge badge-wein">Weingut · Agriturismo</span>
+        </div>
+        <div class="card-location">Precenicco, Via Lignano</div>
+        <p class="card-tagline">Kleines Familiengut in Lagunnähe — für alle, die lieber direkt beim Erzeuger kaufen.</p>
+        <p class="card-body">Baccichetto ist kein Marketingprodukt, sondern ein echter landwirtschaftlicher Betrieb mit Weinbau in einer der ruhigeren Ecken Friauls — direkt an der Straße nach Lignano, also praktisch auf dem Weg. Direktverkauf, kein großer Verkostungsraum, dafür echtes Gespräch mit dem Erzeuger und Preise, die das widerspiegeln. Wer hier kauft, weiß, woher der Wein kommt.</p>
+        <a href="https://maps.app.goo.gl/HnV7mTxJaSMQRo6k6" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="region-group">
+      <div class="region-label" style="margin-top:24px;">Isonzo DOC</div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Lis Neris Wines</div>
+          <span class="card-badge badge-wein">Weingut</span>
+        </div>
+        <div class="card-location">San Lorenzo Isontino, Isonzo</div>
+        <p class="card-tagline">Eines der präzisesten Weingüter Friauls — mit Weinen, die keine Erklärung brauchen.</p>
+        <p class="card-body">Lis Neris macht seit Jahrzehnten das, was wenige im Isonzotal so konsequent durchziehen: Weißweine mit Substanz und Haltbarkeit, keine Kompromisse beim Ausbau. Pinot Grigio, Friulano, Chardonnay — alle auf einem Niveau, das man beim Wort Friaul nicht automatisch erwartet. Wer den Wein lieber zuerst im Restaurant kennenlernen will, bekommt ihn beim Da Gigi Marchetto in Lignano bereits auf der Karte. Für den Direktkauf lohnt die Anfahrt nach San Lorenzo.</p>
+        <a href="https://maps.app.goo.gl/pVWK64ihxBHVW9Ji7" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Tenuta Borgo Conventi <span class="new-badge">Empfehlung</span></div>
+          <span class="card-badge badge-wein">Weingut · Tenuta</span>
+        </div>
+        <div class="card-location">Farra d'Isonzo, Collio / Isonzo</div>
+        <p class="card-tagline">Große Tenuta mit Weinbau auf Collio- und Isonzo-Lagen — sorgfältig und gut strukturiert.</p>
+        <p class="card-body">Borgo Conventi ist eine der größeren Adressen im Grenzgebiet zwischen Collio und Isonzo DOC, und man merkt das an der Konsequenz des Sortiments: breite Auswahl, hohe Verlässlichkeit, schöne Anlage. Der Refosco und der Sauvignon Blanc sind Pflichtverkostung. Direktverkauf und Führungen auf Anfrage — kombinierbar mit einem Abstecher nach Gorizia.</p>
+        <a href="https://maps.app.goo.gl/wEPREsTk7sqAn4Hr6" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- EINKAUF -->
+  <div id="einkauf" class="section">
+    <div class="section-header">
+      <div class="section-label">Rubrik IV</div>
+      <h2 class="section-title">Einkauf</h2>
+      <p class="section-desc">Frischer Fisch in Bibione, das beste Brot im Ort, Fleisch und Wurstwaren vom Fachmann — und die Supermärkte, bei denen sich was findet.</p>
+    </div>
+
+    <div class="region-group">
+      <div class="region-label">Bibione — Spezialisten</div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Friulpesca</div>
+          <span class="card-badge badge-fisch">Fischgeschäft</span>
+        </div>
+        <div class="card-location">Bibione</div>
+        <p class="card-tagline">Der Fischhändler in Bibione — was hier nicht im Angebot ist, war heute nicht im Netz.</p>
+        <p class="card-body">Wer in Bibione selbst kochen will und dabei auf frischen Fisch angewiesen ist, kommt an Friulpesca nicht vorbei. Das Angebot hängt von der Saison und der Anlieferung ab — was bedeutet, dass es frisch ist. Branzino, Orata, Cozze, Vongole: alles, was die Adria hergibt, wenn sie will. Morgens einkaufen, mittags essen.</p>
+        <a href="https://maps.app.goo.gl/AWHGPAiBCHm6NU6V6" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Il Forno di Ranieri</div>
+          <span class="card-badge badge-baeckerei">Bäckerei · Forno</span>
+        </div>
+        <div class="card-location">Bibione</div>
+        <p class="card-tagline">Das Brot des Tages — und in Bibione gibt es nicht viele Stellen, an denen man das so sagen kann.</p>
+        <p class="card-body">Il Forno di Ranieri ist die verlässlichste Adresse für frisches Brot und Gebäck am Ort. Für das Frühstück auf der Terrasse, das Picknick am Strand oder den Einkauf für den Abend: wer früh genug kommt, bekommt das Beste. Typisch friulanisches Brot, Focaccia, gelegentlich regionales Gebäck — kein Touristenaufschlag, kein Designerladen.</p>
+        <a href="https://maps.app.goo.gl/JKDrmVLjTuCwYU248" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Macelleria Salumeria Airone</div>
+          <span class="card-badge badge-metzgerei">Metzgerei · Salumeria</span>
+        </div>
+        <div class="card-location">Bibione</div>
+        <p class="card-tagline">Prosciutto, Montasio, hausgemachte Wurstwaren — der Fachmann für alles, was in der Kühlbox landet.</p>
+        <p class="card-body">Die Macelleria Airone ist der richtige Ort für Wurstwaren und Käse, die tatsächlich aus der Region kommen: Prosciutto di San Daniele, Montasio in verschiedenen Reifegraden, eigene Fleischprodukte. Für das Grillen, die Antipasti-Platte oder den Vorrat für die nächsten Tage deutlich besser als das Supermarktregal. Persönliche Beratung inklusive, wenn man Italienisch zumindest versucht.</p>
+        <a href="https://maps.app.goo.gl/ajFepMNozmu5UgCJ9" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Ziroldo</div>
+          <span class="card-badge badge-baeckerei">Bäckerei · Forno</span>
+        </div>
+        <div class="card-location">Bibione</div>
+        <p class="card-tagline">Die zweite Backadresse im Ort — mit gutem Eigencharakter und etwas anderer Auswahl.</p>
+        <p class="card-body">Ziroldo und Il Forno di Ranieri sind die zwei verlässlichen Backadressen in Bibione, und beide haben ihre eigene Stärke. Ziroldo fällt durch eine etwas breitere Auswahl an Süßgebäck und Cornetti auf — wer beim Frühstück mehr Auswahl will oder eine zweite Meinung zum Brot sucht, macht hier keinen Fehler.</p>
+        <a href="https://maps.app.goo.gl/AqoP259WqDoo3WzXA" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="region-group">
+      <div class="region-label" style="margin-top:24px;">Bibione — Supermärkte</div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Discount Ildi</div>
+          <span class="card-badge badge-discount">Discount</span>
+        </div>
+        <div class="card-location">Bibione</div>
+        <p class="card-tagline">Basisversorgung ohne Aufschlag — für alles, was man täglich braucht und nicht zweimal drüber nachdenken will.</p>
+        <p class="card-body">Ildi ist kein Ort für besondere Einkäufe, aber ein sehr nützlicher: günstiger als die anderen Supermärkte im Ort, gut erreichbar, solides Grundsortiment. Für Wasser, Getränke, Grundnahrungsmittel und alles, was man dreimal die Woche kauft, die vernünftigste Option in Bibione.</p>
+        <a href="https://maps.app.goo.gl/KpVUS7eCLSWKhx3D8" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Lidl Bibione</div>
+          <span class="card-badge badge-supermarkt">Supermarkt</span>
+        </div>
+        <div class="card-location">Bibione / Caorle-Straße</div>
+        <p class="card-tagline">Verlässliches Sortiment, gute Preise — und gelegentlich überraschend gut im Weinsortiment.</p>
+        <p class="card-body">Der Lidl ist für einen Strandort gut bestückt: Das Weinsortiment hat immer wieder lokale Überraschungen, das Frischsortiment ist solide, und die Preise liegen deutlich unter dem Strandpreisniveau der kleineren Läden. Für den Wocheneinkauf oder die große Wasserlieferung die praktischste Lösung in Reichweite.</p>
+        <a href="https://maps.app.goo.gl/mNhLfCFpBYLwYcuG9" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="region-group">
+      <div class="region-label" style="margin-top:24px;">Portogruaro & Udine — Umgebung</div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Supermercato Coop</div>
+          <span class="card-badge badge-supermarkt">Supermarkt</span>
+        </div>
+        <div class="card-location">Portogruaro, Veneto</div>
+        <p class="card-tagline">Der große Einkauf auf dem Weg — besser sortiert und günstiger als alles in Bibione selbst.</p>
+        <p class="card-body">Portogruaro liegt auf der Strecke zwischen Bibione und der Autobahn — und wer den Umweg in Kauf nimmt, wird belohnt: breiteres Sortiment, bessere Preise, mehr lokale Produkte aus dem Veneto und Friaul als in den Küstensupermärkten. Guter Stopp für den Großeinkauf zu Wochenbeginn.</p>
+        <a href="https://maps.app.goo.gl/yf2ESqGSAH1YRhSYA" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <div class="card-name">Spazio CONAD Martignacco <span class="new-badge">Empfehlung</span></div>
+          <span class="card-badge badge-supermarkt">Supermarkt</span>
+        </div>
+        <div class="card-location">Martignacco, bei Udine</div>
+        <p class="card-tagline">Für den Udine-Tag: das beste Weinregal im Umkreis und die breiteste Auswahl an friulanischen Spezialitäten.</p>
+        <p class="card-body">Wer sowieso nach Udine fährt, sollte den Abstecher nach Martignacco einplanen: Der CONAD hat eines der besten lokalen Weinsortimente in der Region — Collio, Isonzo, Friuli Colli Orientali — und eine Delicatessen-Abteilung, bei der Montasio, San Daniele und regionale Salumi deutlich besser vertreten sind als in jedem Bibione-Supermarkt. Guter Ort für Mitbringsel, die man selbst auch mag.</p>
+        <a href="https://maps.app.goo.gl/gQ9hDWAitZjpqhaR8" class="card-link" target="_blank">
+          Auf Google Maps ansehen
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">Nord Italia Guide · Curated Edition</div>
+
+<script>
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const map = { intro: 0, cafes: 1, restaurants: 2, wein: 3, einkauf: 4 };
+    const tabs = document.querySelectorAll('.nav-tab');
+    if (map[id] !== undefined) tabs[map[id]].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
